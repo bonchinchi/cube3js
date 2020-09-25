@@ -35,8 +35,8 @@
 
             document.body.appendChild( renderT.domElement );
             controls = new THREE.OrbitControls( camera, renderT.domElement );
-
-
+            controls.target.set(0, 0, 700);
+            controls.update();
 
             function randomColorTaker() {
                 for(var i = 0; i < geometry.faces.length; i++ ) {
@@ -50,7 +50,6 @@
                 cube.rotation.y += 0.008;
                 cube.rotation.z += 0.008;
                 renderT.render(scene, camera);
-                controls.update();
 
             };
         </script>
