@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>Rotating interactable cube with buttons</title>
+        <link rel="stylesheet" href="cube2.css">
+    </head>
+    <body>
+        <!-- Link to *.js ThreeJS files -->
+        <script src="js/three.js"></script>
+        <script src="https://threejs.org/examples/js/controls/TransformControls.js"></script>
+        <ul>
+            <li>New speed in X axis: <input type="number" id="rX" placeholder="" value="0.01" step="0.01"></li><br>
+            <li>New speed in Y axis: <input type="number" id="rY" placeholder="" value="0.01" step="0.01"></li><br>
+            <li>New speed in Z axis: <input type="number" id="rZ" placeholder="" value="0.01" step="0.01"></li><br>
+            <div class="button">
+                <input id="submitSpead" value="Submit new spead" type="button">
+            </div><br>
+        </ul>
+        <script>
+            var xSpeed = parseFloat(document.getElementById('rX').value);
+            var ySpeed = parseFloat(document.getElementById('rY').value);
+            var zSpeed = parseFloat(document.getElementById('rZ').value);
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);
+            var renderT = new THREE.WebGLRenderer({ alpha: true });
+            renderT.setPixelRatio(window.devicePixelRatio);
+            scene.background = null;
+            renderT.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderT.domElement);
+            var geometry = new THREE.BoxGeometry(300, 300, 300,5, 5, 5);
+            randomColorTaker();
+            var material = new THREE.MeshBasicMaterial( { color: 0x0fffff, vertexColors: true, shading: THREE.FlatShading} );
+            var cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            camera.position.y = -20;
+            camera.position.z = 700;	
+            controls = new THREE.TransformControls(camera, renderT.domElement);
+            controls.attach(cube);
+            scene.add(controls);
+            document.getElementById("submitSpead").onclick = function() {
+                xSpeed = parseFloat(document.getElementById('rX').value);
+                ySpeed = parseFloat(document.getElementById('rY').value);
+                zSpeed = parseFloat(document.getElementById('rZ').value);
+            };
+            document.body.appendChild( renderT.domElement );
+            animateIt();
+
+            function randomColorTaker() {
+                for(var i = 0; i < geometry.faces.length; i++ ) {
+                    geometry.faces[i].color.setHex(  0x0fffff * Math.random());
+                }
+            };
+            function animateIt() {
+                requestAnimationFrame(animateIt);
+                cube.rotation.x += 0.008+xSpeed;
+                cube.rotation.y += 0.008+ySpeed;
+                cube.rotation.z += 0.008+zSpeed;
+                renderT.render(scene, camera);
+            };
+        </script>
+    </body>
+</html>
